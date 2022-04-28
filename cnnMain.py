@@ -25,13 +25,13 @@ def run():
                                             download=True, transform=train_transform)
     train_set, val_set = torch.utils.data.random_split(dataset, [40000, 10000])
 
-    val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=8)
-    trainloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=8)
+    val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_size, shuffle=False)
+    trainloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True)
 
     test_set = torchvision.datasets.CIFAR10(root='./data', train=False,
                                         download=True, transform=test_transform)
     testloader = torch.utils.data.DataLoader(test_set, batch_size=batch_size,
-                                            shuffle=False, num_workers=8)
+                                            shuffle=False)
 
     classes = ('plane', 'car', 'bird', 'cat',
             'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
