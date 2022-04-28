@@ -187,7 +187,6 @@ def run():
     dataiter = iter(testloader)
     images, labels = dataiter.next()
 
-    net = Net()
     net.load_state_dict(torch.load(PATH))
 
     correct = 0
