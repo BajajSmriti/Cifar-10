@@ -101,6 +101,9 @@ def run():
             return out
 
     net = Net()
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    print('Device:', device)
+    net.to(device)
 
     num_params = sum(p.numel() for p in net.parameters() if p.requires_grad)
     print("Number of trainable parameters:", num_params)
@@ -117,6 +120,7 @@ def run():
         correct = 0
         for data in trainloader:
             batch, labels = data
+            batch, labels = batch.to(device), labels.to(device)
 
             optimizer.zero_grad()
             outputs = net(batch)
@@ -141,6 +145,8 @@ def run():
             correct_val = 0
             for data in val_loader:
                 batch, labels = data
+                batch, labels = batch.to(device), labels.to(device)
+
                 outputs = net(batch)
                 loss = criterion(outputs, labels)
                 _, predicted = torch.max(outputs, 1)
@@ -192,6 +198,7 @@ def run():
     with torch.no_grad():
         for data in testloader:
             images, labels = data
+            images, labels = images.to(device), labels.to(device)
             # calculate outputs by running images through the network
             outputs = net(images)
             # the class with the highest energy is what we choose as prediction
