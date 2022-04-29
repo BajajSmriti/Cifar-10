@@ -114,19 +114,6 @@ print ('Start training Svm classifier')
 
 classifier = Svm(xTrain.shape[1], numClasses)
 
-# Show weight for each class before training
-if classifier.W is not None:
-    tmpW = classifier.W[:-1, :]
-    tmpW = tmpW.reshape(32, 32, 3, 10)
-    tmpWMin, tmpWMax = np.min(tmpW), np.max(tmpW)
-    for i in range(numClasses):
-        plt.subplot(2, 5, i+1)
-        plt.title(classes[i])
-        wPlot = 255.0 * (tmpW[:, :, :, i].squeeze() - tmpWMin) / (tmpWMax - tmpWMin)
-        plt.imshow(wPlot.astype('uint8'))
-    plt.clf()
-    plt.show()
-
 # Training classifier
 loss_hist = classifier.train(xTrain, yTrain, lr=1e-7, reg=5e4, iter=1500 ,verbose=True)
 plt.plot(loss_hist)
