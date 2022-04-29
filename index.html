@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Final Project</title>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+
+<body class="vscode-body vscode-light">
+    <h1 id="final-project">Final Project</h1>
+    <div style="text-align: right">DS 5220 Supervised Machine Learning, Spring 2022 </div>
+    <div style="text-align: right">~ <a href="mailto:yadav.shas@northeastern.edu">Shashi Bhushan Yadav</a> </div>
+    <div style="text-align: right">~ <a href="mailto:bajaj.sm@northeastern.edu">Smriti Bajaj</a> </div>
+    <h2 id="instructions"><strong>Introduction</strong></h2>
+    <p><em><strong>CIFAR-10</strong></em> is a dataset of 50,000 32x32 colored training images and 10,000 test images,
+        labeled with 10 categories.
+        This project focusses on implementing 5 different classification algorithms on the
+        <em><strong>CIFAR-10</strong></em> dataset.
+        We have used Python and its various libraries like PyTorch, keras, scikit-learn, matplotlib, numpy and more for
+        the project.
+    </p>
+    <h4 id="here-are-the-classes-in-the-dataset-as-well-as-10-random-images-from-each-class">Here are the classes in the
+        dataset, as well as 10 random images from each class:</h4>
+    <p align="left">
+        <img src="https://pytorch.org/tutorials/_images/cifar10.png" />
+    </p>
+    <h3 id="requirements"><strong>Methods</strong></h3>
+    <ol>
+        <li>We have attempted to calculate the dataset's accuracy using:
+            <ul>
+                <li><a href="#logistic">Logistic Regression</a></li>
+                <li><a href="#svmK">Support Vector Machine (SVM) w/ kernel</a></li>
+                <li><a href="#svm">SVM w/o kernel</a></li>
+                <li><a href="#cnn">Deep Neural Network (DNN) w/ Convolution Layer (CNN)</a></li>
+                <li><a href="#dnn">DNN w/o convolution layer</a></li>
+            </ul>
+        </li>
+        <li>The report should include
+            <ul>
+                <li>Briefly introduces the methods you use</li>
+                <li>Analyze the result for each method (graph, accuracy, etc.)</li>
+                <li>Compare the difference between each method (in terms of, convergence speed, accuracy, etc.)</li>
+                <li>The code you used</li>
+            </ul>
+        </li>
+    </ol>
+    <h2 id="how-to"><strong>Models & Analysis</strong></h2>
+    <h3 id="logistic"><strong>Logistic Regression</strong></h3>
+    <p>Here goes the description<a href="https://www.cs.toronto.edu/~kriz/cifar.html">official
+            website</a></p>
+    <pre><code class="language-bash"><div><span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC
+classifier = SVC(kernel = 'rbf', random_state = 0)
+classifier.fit(xTrain, yTrain)
+</div></code></pre>
+    <h3 id="svmK"><strong>Support Vector Machine (SVM) w/ kernel</strong></h3>
+    <pre><code class="language-bash"><div><span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC
+classifier = SVC(kernel = 'rbf', random_state = 0)
+classifier.fit(xTrain, yTrain)
+</div></code></pre>
+
+    <h3 id="svm"><strong>SVM w/o kernel</strong></h3>
+    <pre><code class="language-python"><div><span class="hljs-keyword">def</span> train (self, x, y, lr=1e-3, reg=1e-5, iter=100, batchSize=200, verbose=False):
+    <span class="hljs-comment"># Run stochastic gradient descent to optimize W.</span>
+    lossHistory = []
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(iter):
+        xBatch = <span class="hljs-keyword">None</span>
+        yBatch = <span class="hljs-keyword">None</span>
+
+        num_train = np.random.choice(x.shape[0], batchSize)
+        xBatch = x[num_train]
+        yBatch = y[num_train]
+        loss, dW = <span class="hljs-keyword">self</span>.calLoss(xBatch,yBatch,reg)
+        <span class="hljs-keyword">self</span>.W= <span class="hljs-keyword">self</span>.W - lr * dW
+        lossHistory.append(loss)
+
+        <span class="hljs-keyword">if</span> verbose <span class="hljs-keyword">and</span> i % 100 == 0 <span class="hljs-keyword">and</span> len(lossHistory) <span class="hljs-keyword">is not</span> 0:
+        <span class="hljs-keyword">print</span>('Loop {0} loss {1}'.format(i, lossHistory[i]))
+
+        <span class="hljs-keyword">return</span> lossHistory
+</div></code></pre>
+    <h3 id="cnn"><strong>Deep Neural Network (DNN) w/ Convolution Layer (CNN)</strong></h3>
+    <pre><code class="language-python"><div><span class="hljs-keyword">class</span> Net(nn.Module):
+    <span class="hljs-keyword">def</span> __init__(<span class="hljs-keyword">self</span>):
+        super(Net, <span class="hljs-keyword">self</span>).__init__()
+        <span class="hljs-keyword">self</span>.conv1 = nn.Conv2d(3, 128, 5, padding=2)
+        <span class="hljs-keyword">self</span>.conv2 = nn.Conv2d(128, 128, 5, padding=2)
+        <span class="hljs-keyword">self</span>.conv3 = nn.Conv2d(128, 256, 3, padding=1)
+        <span class="hljs-keyword">self</span>.conv4 = nn.Conv2d(256, 256, 3, padding=1)
+        <span class="hljs-keyword">self</span>.pool = nn.MaxPool2d(2, 2)
+        <span class="hljs-keyword">self</span>.bn_conv1 = nn.BatchNorm2d(128)
+        <span class="hljs-keyword">self</span>.bn_conv2 = nn.BatchNorm2d(128)
+        <span class="hljs-keyword">self</span>.bn_conv3 = nn.BatchNorm2d(256)
+        <span class="hljs-keyword">self</span>.bn_conv4 = nn.BatchNorm2d(256)
+        <span class="hljs-keyword">self</span>.bn_dense1 = nn.BatchNorm1d(1024)
+        <span class="hljs-keyword">self</span>.bn_dense2 = nn.BatchNorm1d(512)
+        <span class="hljs-keyword">self</span>.dropout_conv = nn.Dropout2d(p=0.25)
+        <span class="hljs-keyword">self</span>.dropout = nn.Dropout(p=0.5)
+        <span class="hljs-keyword">self</span>.fc1 = nn.Linear(256 * 8 * 8, 1024)
+        <span class="hljs-keyword">self</span>.fc2 = nn.Linear(1024, 512)
+        <span class="hljs-keyword">self</span>.fc3 = nn.Linear(512, 10)
+
+    <span class="hljs-keyword">def</span> conv_layers(self, x):
+        out = F.relu(<span class="hljs-keyword">self</span>.bn_conv1(<span class="hljs-keyword">self</span>.conv1(x)))
+        out = F.relu(<span class="hljs-keyword">self</span>.bn_conv2(<span class="hljs-keyword">self</span>.conv2(out)))
+        out = <span class="hljs-keyword">self</span>.pool(out)
+        out = <span class="hljs-keyword">self</span>.dropout_conv(out)
+        out = F.relu(<span class="hljs-keyword">self</span>.bn_conv3(<span class="hljs-keyword">self</span>.conv3(out)))
+        out = F.relu(<span class="hljs-keyword">self</span>.bn_conv4(<span class="hljs-keyword">self</span>.conv4(out)))
+        out = <span class="hljs-keyword">self</span>.pool(out)
+        out = <span class="hljs-keyword">self</span>.dropout_conv(out)
+        <span class="hljs-keyword">return</span> out
+
+    <span class="hljs-keyword">def</span> dense_layers(self, x):
+        out = F.relu(<span class="hljs-keyword">self</span>.bn_dense1(<span class="hljs-keyword">self</span>.fc1(x)))
+        out = <span class="hljs-keyword">self</span>.dropout(out)
+        out = F.relu(<span class="hljs-keyword">self</span>.bn_dense2(<span class="hljs-keyword">self</span>.fc2(out)))
+        out = <span class="hljs-keyword">self</span>.dropout(out)
+        out = <span class="hljs-keyword">self</span>.fc3(out)
+        <span class="hljs-keyword">return</span> out
+
+    <span class="hljs-keyword">def</span> forward(self, x):
+        out = <span class="hljs-keyword">self</span>.conv_layers(x)
+        out = out.view(-1, 256 * 8 * 8)
+        out = <span class="hljs-keyword">self</span>.dense_layers(out)
+        <span class="hljs-keyword">return</span> out
+</div></code></pre>
+    <h3 id="dnn"><strong>DNN w/o convolution layer</strong></h3>
+    <pre><code class="language-python"><div><span class="hljs-comment"># dependencies</span>
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+<span class="hljs-comment">#################### Your Code ####################</span>
+ROOT_PATH=<span class="hljs-string">&#x27;./&#x27;</span>  <span class="hljs-comment"># Modify this line with the path to the folder where folder &quot;cifar-10-batches-py&quot; locate</span>
+<span class="hljs-comment">###################################################</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">unpickle</span>(<span class="hljs-params">file</span>):</span>
+<span class="hljs-keyword">import</span> pickle
+<span class="hljs-keyword">with</span> open(file, <span class="hljs-string">&#x27;rb&#x27;</span>) <span class="hljs-keyword">as</span> fo:
+    dict = pickle.load(fo, encoding=<span class="hljs-string">&#x27;bytes&#x27;</span>)
+<span class="hljs-keyword">return</span> dict
+
+batch1 = unpickle(ROOT_PATH+<span class="hljs-string">&quot;cifar-10-batches-py/data_batch_1&quot;</span>)
+batch2 = unpickle(ROOT_PATH+<span class="hljs-string">&quot;cifar-10-batches-py/data_batch_2&quot;</span>)
+batch3 = unpickle(ROOT_PATH+<span class="hljs-string">&quot;cifar-10-batches-py/data_batch_3&quot;</span>)
+batch4 = unpickle(ROOT_PATH+<span class="hljs-string">&quot;cifar-10-batches-py/data_batch_4&quot;</span>)
+batch5 = unpickle(ROOT_PATH+<span class="hljs-string">&quot;cifar-10-batches-py/data_batch_5&quot;</span>)
+test_batch = unpickle(ROOT_PATH+<span class="hljs-string">&quot;cifar-10-batches-py/test_batch&quot;</span>)
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">load_data0</span>(<span class="hljs-params">btch</span>):</span>
+labels = btch[<span class="hljs-string">b&#x27;labels&#x27;</span>]
+imgs = btch[<span class="hljs-string">b&#x27;data&#x27;</span>].reshape((<span class="hljs-number">-1</span>, <span class="hljs-number">32</span>, <span class="hljs-number">32</span>, <span class="hljs-number">3</span>))
+
+res = []
+<span class="hljs-keyword">for</span> ii <span class="hljs-keyword">in</span> range(imgs.shape[<span class="hljs-number">0</span>]):
+    img = imgs[ii].copy()
+    img = np.fliplr(np.rot90(np.transpose(img.flatten().reshape(<span class="hljs-number">3</span>,<span class="hljs-number">32</span>,<span class="hljs-number">32</span>)), k=<span class="hljs-number">-1</span>))
+    res.append(img)
+imgs = np.stack(res)
+<span class="hljs-keyword">return</span> labels, imgs
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">load_data</span>():</span>
+x_train_l = []
+y_train_l = []
+<span class="hljs-keyword">for</span> ibatch <span class="hljs-keyword">in</span> [batch1, batch2, batch3, batch4, batch5]:
+    labels, imgs = load_data0(ibatch)
+    x_train_l.append(imgs)
+    y_train_l.extend(labels)
+x_train = np.vstack(x_train_l)
+y_train = np.vstack(y_train_l)
+
+x_test_l = []
+y_test_l = []
+labels, imgs = load_data0(test_batch)
+x_test_l.append(imgs)
+y_test_l.extend(labels)
+x_test = np.vstack(x_test_l)
+y_test = np.vstack(y_test_l)
+<span class="hljs-keyword">return</span> (x_train, y_train), (x_test, y_test)
+
+(x_train, y_train), (x_test, y_test) = load_data()
+print(<span class="hljs-string">&#x27;x_train shape:&#x27;</span>, x_train.shape)
+print(x_train.shape[<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;train samples&#x27;</span>)
+print(x_test.shape[<span class="hljs-number">0</span>], <span class="hljs-string">&#x27;test samples&#x27;</span>)
+<span class="hljs-keyword">del</span> batch1, batch2, batch3, batch4, batch5, test_batch
+
+<span class="hljs-comment">#################### Your Code ####################</span>
+
+
+
+<span class="hljs-comment">###################################################</span>
+</div></code></pre>
+
+</body>
+
+</html>
